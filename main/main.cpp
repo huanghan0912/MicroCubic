@@ -3,11 +3,20 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "lvgl.h"
-#include "Screen.h"
+#include "Screem.h"
+#include "Sd.h"
+#include "Wifi.h"
 
-Screen screen;
+
+
+Screem screem;
+Sd sdCard;
+Wifi wifi;
 
 extern "C" void app_main(void)
 {
-
+    wifi.Init();
+    sdCard.Init();
+    wifi.BeginSTA("304","22358122");
+    screem.Init();
 }
