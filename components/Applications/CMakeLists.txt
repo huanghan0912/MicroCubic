@@ -7,7 +7,11 @@ cmake_minimum_required(VERSION 3.5)
 
 
 set( SRCS
-    WeatherApp/weatherApp.c
+    WeatherApp/WeatherApp.c
+    WeatherApp/WeatherUI.c
+    WeatherApp/ch_font_20.c
+    WeatherApp/lv_font_ibmplex_64.c
+    WeatherApp/lv_font_ibmplex_115.c
  )
 
 
