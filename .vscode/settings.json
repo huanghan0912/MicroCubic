@@ -11,9 +11,14 @@
     "idf.pythonBinPath": "/home/huanghan0912/.espressif/python_env/idf5.0_py3.10_env/bin/python",
     "idf.toolsPath": "/home/huanghan0912/.espressif",
     "files.associations": {
+        "*.cpp": "cpp",
         "*.tcc": "cpp",
         "ui.h": "c",
-        "weatherui.h": "c"
+        "weatherui.h": "c",
+        "*.inc": "c",
+        "*.ipp": "c",
+        "string": "cpp"
     },
-    "idf.flashType": "UART"
+    "idf.flashType": "UART",
+    "idf.portWin": "COM3"
 }

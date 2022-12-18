@@ -7,11 +7,17 @@ extern "C"
 #endif
 
 
+
+
 void WeatherAppInit();
 
+void GetWeathertext();
 
+void GetWeatherText();
 
+void MakeWeatherJson();
 
+void  GetnetworkTime();
 
 
 

@@ -7,18 +7,21 @@ cmake_minimum_required(VERSION 3.5)
 
 
 set( SRCS
-    WeatherApp/WeatherApp.c
-    WeatherApp/WeatherUI.c
-    WeatherApp/ch_font_20.c
-    WeatherApp/lv_font_ibmplex_64.c
-    WeatherApp/lv_font_ibmplex_115.c
+    WeatherApp/WeatherApp.cpp
+    WeatherApp/WeatherUI/WeatherUI.c
+    WeatherApp/WeatherUI/ch_font_20.c
+    WeatherApp/WeatherUI/lv_font_ibmplex_64.c
+    WeatherApp/WeatherUI/lv_font_ibmplex_115.c
+    Screen.cpp
  )
 
 
 
 
 set(INCLUDE
+    WeatherApp/WeatherUI
     WeatherApp
+    .
 )
 
 
@@ -26,7 +29,9 @@ set(INCLUDE
 
  set(COMPONENT_REQUIRES
     lvgl
-    lvgl_St7789_driver
+    lvgl_esp32_drivers
+    Espidf_Study
+    json
     )
 
 
