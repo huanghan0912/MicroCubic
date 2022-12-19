@@ -23,9 +23,12 @@ void Screen::Init(){
     lvgl_driver_init();
     lv_port_disp_init();
     _lv_timer_create();
+    xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,2,NULL,APP_CPU_NUM);
+    GetnetworkTimeInit();
+    GetnetworkTime();
     WeatherAppInit();
     GetWeatherText();
-    GetnetworkTime();
+    WeatherPlay();
 }
 
 static IRAM_ATTR void lv_timer_cb(void *arg)
@@ -68,4 +71,12 @@ void lv_port_disp_init()
 
     /*Finally register the driver*/
     lv_disp_drv_register(&disp_drv);
+}
+
+void lvglTask(void* Parameter){
+    while(1)
+    {
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+    lv_task_handler();
+    }
 }

@@ -1,6 +1,7 @@
 #include "WeatherUI.h"
 #include "Weather_image.h"
-
+#include "time.h"
+#include "WeatherApp.h"
 static lv_obj_t *scr_1 = NULL;
 
 
@@ -21,7 +22,7 @@ static lv_obj_t *tempImg = NULL, *tempBar = NULL, *tempLabel = NULL;
 static lv_obj_t *humiImg = NULL, *humiBar = NULL, *humiLabel = NULL;
 static lv_obj_t *spaceImg = NULL;
 
-
+static int ManNumber=-1;
 // 天气图标路径的映射关系
 const void *weaImage_map[] = {&weather_0, &weather_9, &weather_14, &weather_5, &weather_25,
                               &weather_30, &weather_26, &weather_11, &weather_23};
@@ -29,6 +30,10 @@ const void *weaImage_map[] = {&weather_0, &weather_9, &weather_14, &weather_5, &
 const void *manImage_map[] = {&man_0, &man_1, &man_2, &man_3, &man_4, &man_5, &man_6, &man_7, &man_8, &man_9};
 static const char weekDayCh[7][4] = {"日", "一", "二", "三", "四", "五", "六"};
 static const char airQualityCh[6][10] = {"优", "良", "轻度", "中度", "重度", "严重"};
+
+
+extern struct WeatherText Weather_text;
+extern struct tm timeinfo;
 
 
 void WeatherUIInit()
@@ -76,7 +81,7 @@ void WeatherUIInit()
     cityLabel = lv_label_create(scr_1);
     lv_obj_add_style(cityLabel, &chFont_style, LV_STATE_DEFAULT);
     lv_label_set_recolor(cityLabel, true);
-    lv_label_set_text(cityLabel, "上海");
+    lv_label_set_text(cityLabel, "未知");
     lv_obj_align(cityLabel, LV_ALIGN_TOP_LEFT, 20, 15);
 
     btn = lv_btn_create(scr_1);
@@ -97,13 +102,13 @@ void WeatherUIInit()
     lv_label_set_text(txtLabel, "最低气温12°C, ");
     lv_obj_set_size(txtLabel, 120, 30);
     lv_label_set_long_mode(txtLabel, LV_LABEL_LONG_SCROLL_CIRCULAR);
-    lv_label_set_text_fmt(txtLabel, "最低气温%d°C, 最高气温%d°C, %s%d 级.   ", 15, 20, "西北风", 0);
+    lv_label_set_text_fmt(txtLabel, "%s ","not connect wifi");
     lv_obj_align(txtLabel, LV_ALIGN_TOP_LEFT, 10, 50);
 
     clockLabel_1 = lv_label_create(scr_1);
     lv_obj_add_style(clockLabel_1, &numberBig_style, LV_STATE_DEFAULT);
     lv_label_set_recolor(clockLabel_1, true);
-    lv_label_set_text_fmt(clockLabel_1, "%02d#ffa500 %02d#", 10, 52);
+    lv_label_set_text_fmt(clockLabel_1, "%02d#ffa500 %02d#", 5, 20);
     lv_obj_align(clockLabel_1, LV_ALIGN_LEFT_MID, 0, 10);
 
     clockLabel_2 = lv_label_create(scr_1);
@@ -114,14 +119,13 @@ void WeatherUIInit()
 
     dateLabel = lv_label_create(scr_1);
     lv_obj_add_style(dateLabel, &chFont_style, LV_STATE_DEFAULT);
-    lv_label_set_text_fmt(dateLabel, "%2d月%2d日   周%s", 11, 23, weekDayCh[1]);
+    lv_label_set_text_fmt(dateLabel, "%2d月%2d日   周%s", 2, 30, weekDayCh[1]);
     lv_obj_align(dateLabel, LV_ALIGN_LEFT_MID, 10, 32);
 
     tempImg = lv_img_create(scr_1);
     lv_img_set_src(tempImg, &temp);
     lv_img_set_zoom(tempImg, 180);
     lv_obj_align(tempImg, LV_ALIGN_LEFT_MID, 10, 70);
-
 
     tempBar = lv_bar_create(scr_1);
     lv_obj_add_style(tempBar, &bar_style, LV_STATE_DEFAULT);
@@ -164,4 +168,32 @@ void WeatherUIInit()
 
 
     lv_scr_load(scr_1);
+}
+
+void SetTimeSrc(){
+     lv_label_set_text_fmt(clockLabel_1, "%02d#ffa500 %02d#",timeinfo.tm_hour, timeinfo.tm_min);
+     lv_label_set_text_fmt(clockLabel_2, "%02d",timeinfo.tm_sec );
+     lv_label_set_text_fmt(dateLabel, "%2d月%2d日   周%s", timeinfo.tm_mon, timeinfo.tm_mday, weekDayCh[timeinfo.tm_wday]);
+}
+
+void SetWeatherSrc(char *Local_name){
+
+    lv_img_set_src(weatherImg, weaImage_map[3]);
+    //地区
+    lv_label_set_text(cityLabel, Local_name);
+    lv_label_set_text_fmt(txtLabel, "今日风 %s, 等级为%s级, 风速%sM/S",Weather_text.wind,Weather_text.windlevel,Weather_text.windSpeed);
+
+    lv_bar_set_value(tempBar,Weather_text.temp, LV_ANIM_ON);
+    lv_label_set_text_fmt(tempLabel, "%2d°C", Weather_text.temp);
+
+    lv_bar_set_value(humiBar, Weather_text.humidity, LV_ANIM_ON);
+    lv_label_set_text_fmt(humiLabel, "%d",Weather_text.humidity);
+}
+
+
+void SetManGifSrc(){
+    if (ManNumber==9) ManNumber=1;
+    ManNumber++;
+    lv_img_set_src(spaceImg, manImage_map[ManNumber]);
+    
 }

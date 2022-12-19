@@ -20,9 +20,12 @@ LV_FONT_DECLARE(ch_font20);
 
 
 void WeatherUIInit();
-
-
-
+//设置时钟的数据
+void SetTimeSrc();
+//设置小人动画
+void SetManGifSrc();
+//设置天气的数据
+void SetWeatherSrc(char *Local_name);
 
 
 #ifdef __cplusplus

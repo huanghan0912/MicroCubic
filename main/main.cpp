@@ -30,10 +30,5 @@ extern "C" void app_main(void)
     wifi.BeginSTA("304","22358122");
     screen.Init();
 
-    while (1)
-    {
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-        lv_task_handler();
-    }
-    
+   
 }

@@ -27,6 +27,6 @@ public:
     static void lv_timer_cb(void *arg);
     //lvgl初始化显示屏幕驱动
     void lv_port_disp_init();
-
+    void lvglTask(void* Parameter);
 
 #endif
