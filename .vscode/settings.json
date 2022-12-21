@@ -17,7 +17,8 @@
         "weatherui.h": "c",
         "*.inc": "c",
         "*.ipp": "c",
-        "string": "cpp"
+        "string": "cpp",
+        "string.h": "c"
     },
     "idf.flashType": "UART",
     "idf.portWin": "COM3"

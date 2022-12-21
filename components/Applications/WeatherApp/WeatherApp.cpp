@@ -4,7 +4,7 @@
 #include "esp_log.h"
 #include "cJSON.h"
 #include <time.h>
-#include "lwip/apps/sntp.h"
+#include "sntp.h"
 
 
 
@@ -32,7 +32,6 @@ void WeatherAppInit()
 
 void GetWeatherTextTask(void* Parameter)
 {
-  GetnetworkTimeInit();
   while(1){
     GetnetworkTime();
     vTaskDelay(((2000)/ portTICK_PERIOD_MS));
@@ -52,6 +51,7 @@ void MakeWeatherJson(){
   cJSON* check;
   cJSON* root =cJSON_Parse(json_root);
   check =cJSON_GetObjectItem(root,"code");
+  
 
   cJSON* now =cJSON_GetObjectItem(root,"now");
   cJSON* cjson_temp = cJSON_GetObjectItem(now,"temp");
@@ -73,19 +73,23 @@ void MakeWeatherJson(){
   ESP_LOGI(TAG,"%s   %d",Weather_text.weather,Weather_text.icon);
   if(atoi(check->valuestring)==200){
     SetWeatherSrc(Local_name);
+    ESP_LOGI(TAG,"获取天气成功");
   }
   else{
     ESP_LOGW(TAG,"%s",check->valuestring);
   }
 }
 /**
- * @brief 刷新天气界面的信息
+ * @brief 刷新时间的信息
  * 
  */
-void FlushWeatherScrTask(void* Parameter){
+void FlushTimeScrTask(void* Parameter){
   while(1){
+    time_t now = 0;
+    time(&now);
+    localtime_r(&now, &timeinfo);
      SetTimeSrc();
-     vTaskDelay(((1000)/ portTICK_PERIOD_MS));
+     vTaskDelay((250)/ portTICK_PERIOD_MS);
   }
 }
 
@@ -98,9 +102,11 @@ void FlushManGifTask(void* Parameter){
 }
 
 void WeatherPlay(){
-    xTaskCreatePinnedToCore(FlushManGifTask,"FlushManGifTask",4096*2,NULL,6,NULL,APP_CPU_NUM);
-    xTaskCreatePinnedToCore(FlushWeatherScrTask,"FlushWeatherScrTask",4096*2,NULL,4,NULL,APP_CPU_NUM);
-    xTaskCreatePinnedToCore(GetWeatherTextTask,"GetWeatherTextTask",4096*2,NULL,5,NULL,APP_CPU_NUM);
+
+    WeatherAppInit();
+    xTaskCreatePinnedToCore(FlushManGifTask,"FlushManGifTask",4096*2,NULL,3,NULL,APP_CPU_NUM);
+    xTaskCreatePinnedToCore(FlushTimeScrTask,"FlushWeatherScrTask",4096*2,NULL,2,NULL,APP_CPU_NUM);
+    xTaskCreatePinnedToCore(GetWeatherTextTask,"GetWeatherTextTask",4096*2,NULL,4,NULL,APP_CPU_NUM);
     
 }
 
@@ -111,20 +117,22 @@ void WeatherPlay(){
 
 
 
-void  GetnetworkTimeInit(){
-  sntp_setoperatingmode(SNTP_OPMODE_POLL);
-  sntp_setservername(0, "ntp.aliyun.com");
-  sntp_setservername(1, "ntp1.aliyun.com");
-  sntp_setservername(2, "cn.pool.ntp.org");
-  setenv("TZ", "CST-8", 1);
-  tzset();
-}
+
+  
+
 
 void GetnetworkTime(){
+  sntp_setoperatingmode(SNTP_OPMODE_POLL);
+  sntp_setservername(0, "cn.ntp.org.cn");
+  sntp_setservername(1, "ntp1.aliyun.com");
+
+  setenv("TZ", "CST-8", 1);
+  tzset();
   sntp_init();
-  time_t now = 0;
-  time(&now);
-  localtime_r(&now, &timeinfo);
-  vTaskDelay(((50)/ portTICK_PERIOD_MS));
+  while(sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET)
+  {
+      vTaskDelay(((50)/ portTICK_PERIOD_MS));
+  }
   sntp_stop();
+  ESP_LOGI(TAG,"获取时间成功");
 }

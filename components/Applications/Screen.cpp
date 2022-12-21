@@ -23,11 +23,7 @@ void Screen::Init(){
     lvgl_driver_init();
     lv_port_disp_init();
     _lv_timer_create();
-    xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,2,NULL,APP_CPU_NUM);
-    GetnetworkTimeInit();
-    GetnetworkTime();
-    WeatherAppInit();
-    GetWeatherText();
+    xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,7,NULL,APP_CPU_NUM);
     WeatherPlay();
 }
 

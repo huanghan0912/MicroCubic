@@ -1,12 +1,6 @@
 #ifndef __WEATHER_IMAGE_H
 #define __WEATHER_IMAGE_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-
 #if __has_include("lvgl.h")
 #include "lvgl.h"
 #else
@@ -2133,10 +2127,6 @@ const lv_img_dsc_t man_9 = {
   .data = man_9_map,
 };
 
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 
 

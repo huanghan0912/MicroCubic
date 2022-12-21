@@ -26,11 +26,10 @@ void GetWeatherTextTask(void* Parameter);
 
 void MakeWeatherJson();
 
-void  GetnetworkTimeInit();
 
 void  GetnetworkTime();
 //刷新时钟界面的信息任务
-void FlushWeatherScrTask(void* Parameter);
+void FlushTimeScrTask(void* Parameter);
 //刷新动画的界面任务
 void FlushManGifTask(void* Parameter);
 
