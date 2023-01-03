@@ -1,5 +1,4 @@
-idf_component_register(
-    SRCS "mpu6050.c"
-    INCLUDE_DIRS "include"
-    REQUIRES "driver"
+idf_component_register(SRCS "MPU6050.cpp" "MPU.cpp"
+                       INCLUDE_DIRS "."
+                       REQUIRES I2Cdev AppController
 )

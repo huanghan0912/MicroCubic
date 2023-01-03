@@ -28,5 +28,7 @@ public:
     //lvgl初始化显示屏幕驱动
     void lv_port_disp_init();
     void lvglTask(void* Parameter);
+    //输入设备初始化
+    void lv_port_indev_init();
 
 #endif

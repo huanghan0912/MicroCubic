@@ -1,7 +1,6 @@
 #include "WeatherUI.h"
 #include "Weather_image.h"
 #include "time.h"
-#include "WeatherApp.h"
 static lv_obj_t *scr_1 = NULL;
 
 
@@ -68,6 +67,7 @@ void WeatherUIInit()
     lv_style_set_pad_bottom(&bar_style, 1);
     lv_style_set_pad_left(&bar_style, 1);
     lv_style_set_pad_right(&bar_style, 1);
+
 
 
     scr_1 = lv_obj_create(NULL);
@@ -166,7 +166,6 @@ void WeatherUIInit()
     lv_obj_align(spaceImg, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
 
 
-
     lv_scr_load(scr_1);
 }
 
@@ -196,4 +195,28 @@ void SetManGifSrc(){
     ManNumber++;
     lv_img_set_src(spaceImg, manImage_map[ManNumber]);
     
+    
+}
+
+void WeatherUIDel(){
+    if (scr_1 != NULL)
+    {
+        // lv_obj_clean(scr_1);
+        scr_1 = NULL;
+        weatherImg = NULL;
+        cityLabel = NULL;
+        btn = NULL;
+        btnLabel = NULL;
+        txtLabel = NULL;
+        clockLabel_1 = NULL;
+        clockLabel_2 = NULL;
+        dateLabel = NULL;
+        tempImg = NULL;
+        tempBar = NULL;
+        tempLabel = NULL;
+        humiImg = NULL;
+        humiBar = NULL;
+        humiLabel = NULL;
+        spaceImg = NULL;
+    }
 }

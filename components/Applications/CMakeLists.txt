@@ -12,15 +12,15 @@ set( SRCS
     WeatherApp/WeatherUI/ch_font_20.c
     WeatherApp/WeatherUI/lv_font_ibmplex_64.c
     WeatherApp/WeatherUI/lv_font_ibmplex_115.c
+    WeatherApp/WeatherUI/WeatherIco.c
     Screen.cpp
  )
 
 
 
-
 set(INCLUDE
-    WeatherApp/WeatherUI
-    WeatherApp
+    WeatherApp/WeatherUI/.
+    WeatherApp/.
     .
 )
 
@@ -32,6 +32,8 @@ set(INCLUDE
     lvgl_esp32_drivers
     Espidf_Study
     json
+    MPU6050
+    AppController
     )
 
 

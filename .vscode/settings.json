@@ -31,6 +31,10 @@
         "memory": "cpp",
         "random": "cpp",
         "future": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "weatherapp.h": "c",
+        "freertos.h": "c",
+        "task.h": "c",
+        "unistd.h": "c"
     }
 }

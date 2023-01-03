@@ -1,6 +1,8 @@
 #ifndef __WEATHER_IMAGE_H
 #define __WEATHER_IMAGE_H
 
+
+
 #if __has_include("lvgl.h")
 #include "lvgl.h"
 #else
@@ -2126,7 +2128,6 @@ const lv_img_dsc_t man_9 = {
   .header.cf = LV_IMG_CF_INDEXED_2BIT,
   .data = man_9_map,
 };
-
 
 
 

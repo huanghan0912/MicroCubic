@@ -5,8 +5,17 @@
 #include "cJSON.h"
 #include <time.h>
 #include "sntp.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+#include "freertos/timers.h"
+
+#include "AppController.h"
 
 
+extern const lv_img_dsc_t WeatherIco;
+
+
+#define WEATHER_APP_NAME "Weather"
 
 struct tm timeinfo ;
 struct WeatherText Weather_text;
@@ -18,8 +27,11 @@ static const char *TAG="WeatherApp";
 char Weather_url[150];  //调用天气的Url
 char Local_name[8]="合肥";  //所在地名称
 char Local_code[15]="101220101";    //所在地代码
-char key[40]="3af5fbac7e89420188958bd85c0fb740";    //调用天气的秘钥
-char json_root[450];
+#define key "3af5fbac7e89420188958bd85c0fb740"   //调用天气的秘钥
+
+TaskHandle_t FlushMan = NULL;
+TaskHandle_t FlushTime = NULL;
+TaskHandle_t GetWeather = NULL;
 
 
 void WeatherAppInit()
@@ -32,52 +44,51 @@ void WeatherAppInit()
 
 void GetWeatherTextTask(void* Parameter)
 {
+  char *json_root =(char*) malloc(450*sizeof(char));
   while(1){
     GetnetworkTime();
-    vTaskDelay(((2000)/ portTICK_PERIOD_MS));
     httpclient.GetResponse(json_root);
-    MakeWeatherJson();
+    
+    //判断是否成功获取天气
+    cJSON* check;
+    cJSON* root =cJSON_Parse(json_root);
+    check =cJSON_GetObjectItem(root,"code");
+    
+
+    cJSON* now =cJSON_GetObjectItem(root,"now");
+    cJSON* cjson_temp = cJSON_GetObjectItem(now,"temp");
+    cJSON* cjson_icon = cJSON_GetObjectItem(now,"icon");
+    cJSON* cjson_weather = cJSON_GetObjectItem(now,"text");
+    cJSON* cjson_wind = cJSON_GetObjectItem(now,"windDir");
+    cJSON* cjson_windlevel = cJSON_GetObjectItem(now,"windScale");
+    cJSON* cjson_windSpeed = cJSON_GetObjectItem(now,"windSpeed");
+    cJSON* cjson_humidity = cJSON_GetObjectItem(now,"humidity");
+
+    Weather_text.temp=atoi(cjson_temp->valuestring);
+    Weather_text.icon=atoi(cjson_icon->valuestring);
+    strcpy(Weather_text.weather, cjson_weather->valuestring);
+    strcpy(Weather_text.wind, cjson_wind->valuestring);
+    strcpy(Weather_text.windlevel, cjson_windlevel->valuestring);
+    strcpy(Weather_text.windSpeed,cjson_windSpeed->valuestring );
+    Weather_text.humidity=atoi(cjson_humidity->valuestring);
+
+    ESP_LOGI(TAG,"%s   %d",Weather_text.weather,Weather_text.icon);
+    if(atoi(check->valuestring)==200){
+      SetWeatherSrc(Local_name);
+      ESP_LOGI(TAG,"获取天气成功");
+    }
+    else{
+      ESP_LOGW(TAG,"%s",check->valuestring);
+    }
+
     vTaskDelay(((1000*60*60*2)/ portTICK_PERIOD_MS));
   }
+   free(json_root);
   
 }
-void GetWeatherText(){
-    httpclient.GetResponse(json_root);
-    MakeWeatherJson();
-}
+
 
 void MakeWeatherJson(){
-  //判断是否成功获取天气
-  cJSON* check;
-  cJSON* root =cJSON_Parse(json_root);
-  check =cJSON_GetObjectItem(root,"code");
-  
-
-  cJSON* now =cJSON_GetObjectItem(root,"now");
-  cJSON* cjson_temp = cJSON_GetObjectItem(now,"temp");
-  cJSON* cjson_icon = cJSON_GetObjectItem(now,"icon");
-  cJSON* cjson_weather = cJSON_GetObjectItem(now,"text");
-  cJSON* cjson_wind = cJSON_GetObjectItem(now,"windDir");
-  cJSON* cjson_windlevel = cJSON_GetObjectItem(now,"windScale");
-  cJSON* cjson_windSpeed = cJSON_GetObjectItem(now,"windSpeed");
-  cJSON* cjson_humidity = cJSON_GetObjectItem(now,"humidity");
-
-  Weather_text.temp=atoi(cjson_temp->valuestring);
-  Weather_text.icon=atoi(cjson_icon->valuestring);
-  strcpy(Weather_text.weather, cjson_weather->valuestring);
-  strcpy(Weather_text.wind, cjson_wind->valuestring);
-  strcpy(Weather_text.windlevel, cjson_windlevel->valuestring);
-  strcpy(Weather_text.windSpeed,cjson_windSpeed->valuestring );
-  Weather_text.humidity=atoi(cjson_humidity->valuestring);
-
-  ESP_LOGI(TAG,"%s   %d",Weather_text.weather,Weather_text.icon);
-  if(atoi(check->valuestring)==200){
-    SetWeatherSrc(Local_name);
-    ESP_LOGI(TAG,"获取天气成功");
-  }
-  else{
-    ESP_LOGW(TAG,"%s",check->valuestring);
-  }
 }
 /**
  * @brief 刷新时间的信息
@@ -104,9 +115,9 @@ void FlushManGifTask(void* Parameter){
 void WeatherPlay(){
 
     WeatherAppInit();
-    xTaskCreatePinnedToCore(FlushManGifTask,"FlushManGifTask",4096*2,NULL,3,NULL,APP_CPU_NUM);
-    xTaskCreatePinnedToCore(FlushTimeScrTask,"FlushWeatherScrTask",4096*2,NULL,2,NULL,APP_CPU_NUM);
-    xTaskCreatePinnedToCore(GetWeatherTextTask,"GetWeatherTextTask",4096*2,NULL,4,NULL,APP_CPU_NUM);
+    xTaskCreatePinnedToCore(FlushManGifTask,"FlushManGifTask",4096*2,NULL,3,&FlushMan,APP_CPU_NUM);
+    xTaskCreatePinnedToCore(FlushTimeScrTask,"FlushWeatherScrTask",4096*2,NULL,2,&FlushTime,APP_CPU_NUM);
+    xTaskCreatePinnedToCore(GetWeatherTextTask,"GetWeatherTextTask",4096*2,NULL,4,&GetWeather,APP_CPU_NUM);
     
 }
 
@@ -116,16 +127,7 @@ void WeatherPlay(){
 /***************************************时钟sntp**************************************************/
 
 
-
-
-  
-
-
 void GetnetworkTime(){
-  sntp_setoperatingmode(SNTP_OPMODE_POLL);
-  sntp_setservername(0, "cn.ntp.org.cn");
-  sntp_setservername(1, "ntp1.aliyun.com");
-
   setenv("TZ", "CST-8", 1);
   tzset();
   sntp_init();
@@ -136,3 +138,43 @@ void GetnetworkTime(){
   sntp_stop();
   ESP_LOGI(TAG,"获取时间成功");
 }
+
+/***************************************天气调用接口************************************/
+
+
+static int WeatherInit(AppController *sys)
+{
+  WeatherPlay();
+  return 0;
+}
+
+static void WeatherProcess(AppController *sys, const ImuAction *act_info)
+{
+  
+    if (act_info->action == BACK)
+    {
+        sys->AppExit();
+        return;
+    }
+} 
+
+static void WeatherBackground(AppController *sys, const ImuAction *act_info)
+{
+  
+}
+
+static int WeatherExit(void *param)
+{
+  vTaskDelete(FlushMan);
+  vTaskDelete(FlushTime);
+  vTaskDelete(GetWeather);
+  httpclient.del();
+  WeatherUIDel();
+  return 0;
+}
+
+APPOBJ WeatherApp = {WEATHER_APP_NAME, &WeatherIco, "",
+                    WeatherInit,WeatherProcess,WeatherBackground,
+                    WeatherExit};
+
+

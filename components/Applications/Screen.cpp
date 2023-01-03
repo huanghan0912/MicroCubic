@@ -1,5 +1,7 @@
 #include "Screen.h"
-#include "WeatherApp.h"
+
+
+
 
 static const  char *TAG="Screen";
 static lv_color_t buf1[LCD_W*LCD_H/10];
@@ -23,8 +25,8 @@ void Screen::Init(){
     lvgl_driver_init();
     lv_port_disp_init();
     _lv_timer_create();
-    xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,7,NULL,APP_CPU_NUM);
-    WeatherPlay();
+    // xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,7,NULL,APP_CPU_NUM);
+
 }
 
 static IRAM_ATTR void lv_timer_cb(void *arg)
@@ -67,12 +69,30 @@ void lv_port_disp_init()
 
     /*Finally register the driver*/
     lv_disp_drv_register(&disp_drv);
+
 }
+
+
+
+/**
+ * @brief Initialize the input device
+ * 
+ */
+// void lv_port_indev_init()
+// {
+//     
+//     static lv_indev_drv_t indev_drv;
+// 	lv_indev_drv_init( &indev_drv );
+// 	indev_drv.type = LV_INDEV_TYPE_ENCODER;
+// 	indev_drv.read_cb = MyMpuRead;
+// 	lv_indev_drv_register( &indev_drv );
+
+// }
 
 void lvglTask(void* Parameter){
     while(1)
     {
-    vTaskDelay(10 / portTICK_PERIOD_MS);
-    lv_task_handler();
+        vTaskDelay(20 / portTICK_PERIOD_MS);
+        lv_task_handler();
     }
-}
+} 
