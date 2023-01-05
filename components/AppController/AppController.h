@@ -29,7 +29,6 @@ class AppController
 private:    
     Screen screen;
     Sd sdCard;
-    Wifi wifi;
 
     APPOBJ *appList[APP_MAX_NUM];      // 预留APP_MAX_NUM个APP注册位
     APPTYPE appTypeList[APP_MAX_NUM];  // 对应APP的运行类型

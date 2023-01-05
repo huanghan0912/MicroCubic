@@ -14,26 +14,15 @@ void AppController::Init(){
     app_exit_flag = 0;
 
 
-
-    wifi.Init();
+    //
     sdCard.Init();
-    wifi.BeginSTA("304","22358122");
     screen.Init();
     AppControllerUIInit();
-
-    appList[0] = new APPOBJ();
-    appList[0]->app_image = &app_loading;
-    appList[0]->app_name = "Loading...";
-    appTypeList[0] = APP_TYPE_REAL_TIME;
-    AppControlDisplayScr(appList[cur_app_index]->app_image,
-                            appList[cur_app_index]->app_name,
-                            LV_SCR_LOAD_ANIM_NONE, true);
 }
 
 void AppController::Display(){
     AppControlDisplayScr(appList[cur_app_index]->app_image,
-                            appList[cur_app_index]->app_name,
-                            LV_SCR_LOAD_ANIM_NONE, true);
+                            appList[cur_app_index]->app_name);
 }
 
 int AppController::AppIsLegal(const APPOBJ *app_obj)
@@ -98,8 +87,7 @@ int AppController::MainProcess(ImuAction *act_info)
         if (act_info->action != UP) 
         {
             AppControlDisplayScr(appList[cur_app_index]->app_image,
-                                    appList[cur_app_index]->app_name,
-                                    anim_type, false);
+                                    appList[cur_app_index]->app_name);
             vTaskDelay(200 / portTICK_PERIOD_MS);
         }
     }
@@ -124,9 +112,10 @@ void AppController::AppExit()
     }
 
     AppControlDisplayScr(appList[cur_app_index]->app_image,
-                            appList[cur_app_index]->app_name,
-                            LV_SCR_LOAD_ANIM_NONE, true);
+                            appList[cur_app_index]->app_name);
 }
+
+
 
 
 

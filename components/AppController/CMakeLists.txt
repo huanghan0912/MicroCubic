@@ -19,8 +19,8 @@ set(INCLUDE
 set(COMPONENT_REQUIRES
     Applications
     lvgl
-    Espidf_Study
-    MPU6050
+    MYDriver
+    mpu6050
 )
 
 

@@ -1,7 +1,7 @@
 #include "WeatherUI.h"
 #include "Weather_image.h"
 #include "time.h"
-static lv_obj_t *scr_1 = NULL;
+static lv_obj_t *scr = NULL;
 
 
 static lv_style_t default_style;  //默认背景
@@ -68,23 +68,32 @@ void WeatherUIInit()
     lv_style_set_pad_left(&bar_style, 1);
     lv_style_set_pad_right(&bar_style, 1);
 
+}
 
+void WeatherUIScrinit(){
 
-    scr_1 = lv_obj_create(NULL);
-    lv_obj_add_style(scr_1, &default_style, LV_STATE_DEFAULT);
+    lv_obj_t *act_obj = lv_scr_act(); // 获取当前活动页
+    if (act_obj == scr)
+        return;
 
-    weatherImg = lv_img_create(scr_1);
+    WeatherUIDel();
+    lv_obj_clean(act_obj);
+
+    scr = lv_obj_create(NULL);
+    lv_obj_add_style(scr, &default_style, LV_STATE_DEFAULT);
+
+    weatherImg = lv_img_create(scr);
     lv_img_set_src(weatherImg, weaImage_map[3]);
     lv_obj_align(weatherImg, LV_ALIGN_TOP_RIGHT, -10, 10);
 
 
-    cityLabel = lv_label_create(scr_1);
+    cityLabel = lv_label_create(scr);
     lv_obj_add_style(cityLabel, &chFont_style, LV_STATE_DEFAULT);
     lv_label_set_recolor(cityLabel, true);
     lv_label_set_text(cityLabel, "未知");
     lv_obj_align(cityLabel, LV_ALIGN_TOP_LEFT, 20, 15);
 
-    btn = lv_btn_create(scr_1);
+    btn = lv_btn_create(scr);
     lv_obj_add_style(btn, &btn_style, LV_STATE_DEFAULT);
     lv_obj_set_pos(btn, 75, 15);
     lv_obj_set_size(btn, 50, 25);
@@ -95,7 +104,7 @@ void WeatherUIInit()
     lv_obj_align(btnLabel, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(btnLabel, airQualityCh[0]);
 
-    txtLabel = lv_label_create(scr_1);
+    txtLabel = lv_label_create(scr);
     lv_obj_add_style(txtLabel, &chFont_style, LV_STATE_DEFAULT);
     // lvgl8之前版本，模式一旦设置 LV_LABEL_LONG_SCROLL_CIRCULAR
     // 宽度恒定等于当前文本的长度，所以下面先设置以下长度
@@ -105,29 +114,29 @@ void WeatherUIInit()
     lv_label_set_text_fmt(txtLabel, "%s ","not connect wifi");
     lv_obj_align(txtLabel, LV_ALIGN_TOP_LEFT, 10, 50);
 
-    clockLabel_1 = lv_label_create(scr_1);
+    clockLabel_1 = lv_label_create(scr);
     lv_obj_add_style(clockLabel_1, &numberBig_style, LV_STATE_DEFAULT);
     lv_label_set_recolor(clockLabel_1, true);
     lv_label_set_text_fmt(clockLabel_1, "%02d#ffa500 %02d#", 5, 20);
     lv_obj_align(clockLabel_1, LV_ALIGN_LEFT_MID, 0, 10);
 
-    clockLabel_2 = lv_label_create(scr_1);
+    clockLabel_2 = lv_label_create(scr);
     lv_obj_add_style(clockLabel_2, &numberSmall_style, LV_STATE_DEFAULT);
     lv_label_set_recolor(clockLabel_2, true);
     lv_label_set_text_fmt(clockLabel_2, "%02d", 00);
     lv_obj_align(clockLabel_2, LV_ALIGN_LEFT_MID, 165, 9);
 
-    dateLabel = lv_label_create(scr_1);
+    dateLabel = lv_label_create(scr);
     lv_obj_add_style(dateLabel, &chFont_style, LV_STATE_DEFAULT);
     lv_label_set_text_fmt(dateLabel, "%2d月%2d日   周%s", 2, 30, weekDayCh[1]);
     lv_obj_align(dateLabel, LV_ALIGN_LEFT_MID, 10, 32);
 
-    tempImg = lv_img_create(scr_1);
+    tempImg = lv_img_create(scr);
     lv_img_set_src(tempImg, &temp);
     lv_img_set_zoom(tempImg, 180);
     lv_obj_align(tempImg, LV_ALIGN_LEFT_MID, 10, 70);
 
-    tempBar = lv_bar_create(scr_1);
+    tempBar = lv_bar_create(scr);
     lv_obj_add_style(tempBar, &bar_style, LV_STATE_DEFAULT);
     lv_bar_set_range(tempBar, -50, 50); // 设置进度条表示的温度为-50~50
     lv_obj_set_size(tempBar, 60, 12);
@@ -135,17 +144,17 @@ void WeatherUIInit()
     lv_bar_set_value(tempBar, 10, LV_ANIM_ON);
     lv_obj_align(tempBar, LV_ALIGN_LEFT_MID, 35, 70);
 
-    tempLabel = lv_label_create(scr_1);
+    tempLabel = lv_label_create(scr);
     lv_obj_add_style(tempLabel, &chFont_style, LV_STATE_DEFAULT);
     lv_label_set_text_fmt(tempLabel, "%2d°C", 18);
     lv_obj_align(tempLabel, LV_ALIGN_LEFT_MID, 103, 70);
 
-    humiImg = lv_img_create(scr_1);
+    humiImg = lv_img_create(scr);
     lv_img_set_src(humiImg, &humi);
     lv_img_set_zoom(humiImg, 180);
     lv_obj_align(humiImg, LV_ALIGN_LEFT_MID, 0, 100);
 
-    humiBar = lv_bar_create(scr_1);
+    humiBar = lv_bar_create(scr);
     lv_obj_add_style(humiBar, &bar_style, LV_STATE_DEFAULT);
     lv_bar_set_range(humiBar, 0, 100);
     lv_obj_set_size(humiBar, 60, 12);
@@ -154,29 +163,31 @@ void WeatherUIInit()
     lv_obj_align(humiBar, LV_ALIGN_LEFT_MID, 35, 100);
 
 
-    humiLabel = lv_label_create(scr_1);
+    humiLabel = lv_label_create(scr);
     lv_obj_add_style(humiLabel, &chFont_style, LV_STATE_DEFAULT);
     lv_label_set_text(humiLabel, "50%");
     lv_obj_align(humiLabel, LV_ALIGN_LEFT_MID, 103, 100);
 
 
     // 太空人图标
-    spaceImg = lv_img_create(scr_1);
+    spaceImg = lv_img_create(scr);
     lv_img_set_src(spaceImg, manImage_map[0]);
     lv_obj_align(spaceImg, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
-
-
-    lv_scr_load(scr_1);
+    
+    lv_scr_load(scr);
 }
 
+
+
 void SetTimeSrc(){
+    WeatherUIScrinit();
      lv_label_set_text_fmt(clockLabel_1, "%02d#ffa500 %02d#",timeinfo.tm_hour, timeinfo.tm_min);
      lv_label_set_text_fmt(clockLabel_2, "%02d",timeinfo.tm_sec );
      lv_label_set_text_fmt(dateLabel, "%2d月%2d日   周%s", timeinfo.tm_mon, timeinfo.tm_mday, weekDayCh[timeinfo.tm_wday]);
 }
 
 void SetWeatherSrc(char *Local_name){
-
+    
     lv_img_set_src(weatherImg, weaImage_map[3]);
     //地区
     lv_label_set_text(cityLabel, Local_name);
@@ -187,36 +198,21 @@ void SetWeatherSrc(char *Local_name){
 
     lv_bar_set_value(humiBar, Weather_text.humidity, LV_ANIM_ON);
     lv_label_set_text_fmt(humiLabel, "%d",Weather_text.humidity);
+
 }
 
 
 void SetManGifSrc(){
+    WeatherUIScrinit();
     if (ManNumber==9) ManNumber=1;
     ManNumber++;
     lv_img_set_src(spaceImg, manImage_map[ManNumber]);
     
-    
 }
 
 void WeatherUIDel(){
-    if (scr_1 != NULL)
+    if (scr != NULL)
     {
-        // lv_obj_clean(scr_1);
-        scr_1 = NULL;
-        weatherImg = NULL;
-        cityLabel = NULL;
-        btn = NULL;
-        btnLabel = NULL;
-        txtLabel = NULL;
-        clockLabel_1 = NULL;
-        clockLabel_2 = NULL;
-        dateLabel = NULL;
-        tempImg = NULL;
-        tempBar = NULL;
-        tempLabel = NULL;
-        humiImg = NULL;
-        humiBar = NULL;
-        humiLabel = NULL;
-        spaceImg = NULL;
+        lv_obj_clean(scr);
     }
 }

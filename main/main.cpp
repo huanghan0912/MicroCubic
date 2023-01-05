@@ -1,20 +1,21 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "freertos/timers.h"
 #include "esp_system.h"
 #include "lvgl.h"
 #include "sntp.h"
 #include "Sd.h"
-#include "Wifi.h"
+#include "HttpServer.h"
+// #include "Wifi.h"
+#include "Screen.h"
 #include "nvs_flash.h"
 #include "esp_timer.h"
 #include "AppController.h"
 #include "WeatherApp.h"
-
-
-
-//测试
 #include "MPU.h"
+
+
 
 
 Mpu mpu;
@@ -22,7 +23,20 @@ ImuAction *a;
 
 
 
+int count=0;
+
  AppController appController;
+
+// lvgl 操作的锁
+SemaphoreHandle_t lvgl_mutex;
+
+// LVGL操作的安全宏（避免脏数据）
+#define LVGL_OPERATE_LOCK(CODE)                          \
+    if (pdTRUE == xSemaphoreTake(lvgl_mutex, portMAX_DELAY)) \
+    {                                                        \
+        CODE                                                 \
+        xSemaphoreGive(lvgl_mutex);                          \
+    }
 
 
 
@@ -36,23 +50,30 @@ extern "C" void app_main(void)
     }
     ESP_ERROR_CHECK(err);
 
+    //测试
 
-    appController.Init();
-    mpu.Init();
-    appController.AppInstall(&WeatherApp);
+    // appController.Init();
+    // mpu.Init();
+    // appController.AppInstall(&WeatherApp);
 
 
-    sntp_setoperatingmode(SNTP_OPMODE_POLL);
-    sntp_setservername(0, "cn.ntp.org.cn");
-    sntp_setservername(1, "ntp1.aliyun.com");
+    // sntp_setoperatingmode(SNTP_OPMODE_POLL);
+    // sntp_setservername(0, "ntp5.aliyun.com");
+    // sntp_setservername(1, "ntp1.aliyun.com");
 
-    a=mpu.GetAction();
-    while(1){
-        a=mpu.GetAction();
-        appController.MainProcess(a);   
-        vTaskDelay(200 / portTICK_PERIOD_MS);
+    // a=mpu.GetAction();
+
+    // lvgl_mutex = xSemaphoreCreateMutex();
+    // while(1){
+    //     LVGL_OPERATE_LOCK(lv_task_handler();)
+    //     if(count == 3){
+    //         a=mpu.GetAction();
+    //         count =0;
+    //     }
+    //     appController.MainProcess(a);    
+    //     count++;
         
-    }
+    // }
     
 
 }

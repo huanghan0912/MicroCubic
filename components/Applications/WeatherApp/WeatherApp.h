@@ -15,16 +15,16 @@ extern APPOBJ WeatherApp;
 
 void WeatherAppInit();
 
-//从网络上获取天气和时钟 任务
+//从互联网上获取界面上所需的所有信息
 void GetWeatherTextTask(void* Parameter);
 
 
 
 void  GetnetworkTime();
 //刷新时钟界面的信息任务
-void FlushTimeScrTask(void* Parameter);
+void FlushTimeScrTask();
 //刷新动画的界面任务
-void FlushManGifTask(void* Parameter);
+void FlushManGifTask();
 
 void WeatherPlay();
 

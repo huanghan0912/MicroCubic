@@ -1,6 +1,4 @@
 build/
-sdkconfig
-sdkconfig.old
 /.metadata
 .vscode
 assert

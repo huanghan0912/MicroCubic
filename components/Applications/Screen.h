@@ -3,7 +3,8 @@
 
 #include "lvgl.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "freertos/timers.h"
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "lvgl_helpers.h"
@@ -11,6 +12,9 @@
 
 #define LCD_W 240
 #define LCD_H 240
+
+
+
 
 class Screen
 {

@@ -30,9 +30,9 @@ set(INCLUDE
  set(COMPONENT_REQUIRES
     lvgl
     lvgl_esp32_drivers
-    Espidf_Study
+    MYDriver
     json
-    MPU6050
+    mpu6050
     AppController
     )
 

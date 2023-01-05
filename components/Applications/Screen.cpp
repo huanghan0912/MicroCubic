@@ -25,7 +25,7 @@ void Screen::Init(){
     lvgl_driver_init();
     lv_port_disp_init();
     _lv_timer_create();
-    // xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,7,NULL,APP_CPU_NUM);
+    // xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,9,NULL,APP_CPU_NUM);
 
 }
 
@@ -92,7 +92,7 @@ void lv_port_disp_init()
 void lvglTask(void* Parameter){
     while(1)
     {
-        vTaskDelay(20 / portTICK_PERIOD_MS);
+        vTaskDelay(50 / portTICK_PERIOD_MS);
         lv_task_handler();
     }
 } 

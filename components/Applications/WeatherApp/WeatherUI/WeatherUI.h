@@ -30,8 +30,10 @@ struct WeatherText
 };
 
 
-
+//天气界面样式初始化
 void WeatherUIInit();
+//天气界面部件初始化
+void WeatherUIScrinit();
 //设置时钟的数据
 void SetTimeSrc();
 //设置小人动画

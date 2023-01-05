@@ -23,14 +23,14 @@ struct WeatherText Weather_text;
 
 HttpClient httpclient;
 static const char *TAG="WeatherApp";
+bool get_weather_flag=false;
 
 char Weather_url[150];  //调用天气的Url
 char Local_name[8]="合肥";  //所在地名称
 char Local_code[15]="101220101";    //所在地代码
 #define key "3af5fbac7e89420188958bd85c0fb740"   //调用天气的秘钥
 
-TaskHandle_t FlushMan = NULL;
-TaskHandle_t FlushTime = NULL;
+//获取互联网天气任务句柄
 TaskHandle_t GetWeather = NULL;
 
 
@@ -39,10 +39,15 @@ void WeatherAppInit()
   sprintf(Weather_url,"https://devapi.qweather.com/v7/weather/now?location=%s&key=%s&gzip=n",Local_code,key);
   ESP_LOGI(TAG,"%s",Weather_url);
   httpclient.Init(Weather_url);
-  WeatherUIInit();//显示初始化
+  WeatherUIInit();
 }
 
-void GetWeatherTextTask(void* Parameter)
+/**
+ * @brief 从互联网上获取界面上所需的所有信息
+ * 
+ * @param pvParameters 
+ */
+void GetWeatherTextTask(void *pvParameters)
 {
   char *json_root =(char*) malloc(450*sizeof(char));
   while(1){
@@ -74,7 +79,7 @@ void GetWeatherTextTask(void* Parameter)
 
     ESP_LOGI(TAG,"%s   %d",Weather_text.weather,Weather_text.icon);
     if(atoi(check->valuestring)==200){
-      SetWeatherSrc(Local_name);
+      get_weather_flag=true;
       ESP_LOGI(TAG,"获取天气成功");
     }
     else{
@@ -94,29 +99,21 @@ void MakeWeatherJson(){
  * @brief 刷新时间的信息
  * 
  */
-void FlushTimeScrTask(void* Parameter){
-  while(1){
-    time_t now = 0;
-    time(&now);
-    localtime_r(&now, &timeinfo);
-     SetTimeSrc();
-     vTaskDelay((250)/ portTICK_PERIOD_MS);
-  }
+void FlushTimeScrTask(){
+  time_t now = 0;
+  time(&now);
+  localtime_r(&now, &timeinfo);
+  SetTimeSrc();
 }
 
 
-void FlushManGifTask(void* Parameter){
-  while(1){
-     SetManGifSrc();
-     vTaskDelay(((50)/ portTICK_PERIOD_MS));
-  }
+void FlushManGifTask(){
+  SetManGifSrc();
 }
 
 void WeatherPlay(){
 
     WeatherAppInit();
-    xTaskCreatePinnedToCore(FlushManGifTask,"FlushManGifTask",4096*2,NULL,3,&FlushMan,APP_CPU_NUM);
-    xTaskCreatePinnedToCore(FlushTimeScrTask,"FlushWeatherScrTask",4096*2,NULL,2,&FlushTime,APP_CPU_NUM);
     xTaskCreatePinnedToCore(GetWeatherTextTask,"GetWeatherTextTask",4096*2,NULL,4,&GetWeather,APP_CPU_NUM);
     
 }
@@ -156,6 +153,14 @@ static void WeatherProcess(AppController *sys, const ImuAction *act_info)
         sys->AppExit();
         return;
     }
+    if(get_weather_flag == true){
+      SetWeatherSrc(Local_name);
+      get_weather_flag = false;
+    }
+    FlushTimeScrTask();
+    FlushManGifTask();
+    vTaskDelay((10)/ portTICK_PERIOD_MS);
+
 } 
 
 static void WeatherBackground(AppController *sys, const ImuAction *act_info)
@@ -165,8 +170,6 @@ static void WeatherBackground(AppController *sys, const ImuAction *act_info)
 
 static int WeatherExit(void *param)
 {
-  vTaskDelete(FlushMan);
-  vTaskDelete(FlushTime);
   vTaskDelete(GetWeather);
   httpclient.del();
   WeatherUIDel();
