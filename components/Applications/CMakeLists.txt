@@ -13,6 +13,10 @@ set( SRCS
     WeatherApp/WeatherUI/lv_font_ibmplex_64.c
     WeatherApp/WeatherUI/lv_font_ibmplex_115.c
     WeatherApp/WeatherUI/WeatherIco.c
+
+    WifiApp/WifiApp.cpp
+    WifiApp/WifiAppUI/WifiAppUI.c
+    WifiApp/WifiAppUI/WifiIco.c
     Screen.cpp
  )
 
@@ -21,6 +25,8 @@ set( SRCS
 set(INCLUDE
     WeatherApp/WeatherUI/.
     WeatherApp/.
+    WifiApp/.
+    WifiApp/WifiAppUI/.
     .
 )
 

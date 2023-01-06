@@ -22,8 +22,10 @@
 
 
 extern bool wifi_flag;
+extern char wifi_ssid[30];
+extern char wifi_password[30];
 
-#define EXAMPLE_ESP_WIFI_SSID      "esp32wifi"
+#define EXAMPLE_ESP_WIFI_SSID      "MicroCubic"
 #define EXAMPLE_ESP_WIFI_PASS      "12345678"
 #define EXAMPLE_ESP_WIFI_CHANNEL   4
 #define EXAMPLE_MAX_STA_CONN       3
@@ -40,4 +42,5 @@ void wifi_init_sta( char * ssid, char * password);
 void WifiSTADel();
 
 void wifiAPDel();
+void startwifi();
 #endif

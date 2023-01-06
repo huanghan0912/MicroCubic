@@ -8,8 +8,7 @@
 #include "freertos/semphr.h"
 
 extern SemaphoreHandle_t ap_sem;
-extern char wifi_name[30];
-extern char wifi_password[30];
+
 
 static esp_err_t index_get_handler(httpd_req_t *req);
 

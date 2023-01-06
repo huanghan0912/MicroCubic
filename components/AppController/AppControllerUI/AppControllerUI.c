@@ -56,7 +56,7 @@ void AppcontrollerUIScrInit(){
     now_app_name = lv_label_create(app_scr);
     lv_obj_add_style(now_app_name, &app_name_style, LV_STATE_DEFAULT);
     // lv_label_set_recolor(now_app_name, true); //先得使能文本重绘色功能
-    lv_label_set_text(now_app_name, "Loading...");
+    lv_label_set_text(now_app_name, "Loading..."); 
     lv_obj_align_to(now_app_name, now_app_image, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 
     lv_scr_load(app_scr);        

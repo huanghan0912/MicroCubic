@@ -7,12 +7,12 @@
 #include "sntp.h"
 #include "Sd.h"
 #include "HttpServer.h"
-// #include "Wifi.h"
 #include "Screen.h"
 #include "nvs_flash.h"
 #include "esp_timer.h"
 #include "AppController.h"
 #include "WeatherApp.h"
+#include "WifiApp.h"
 #include "MPU.h"
 
 
@@ -52,28 +52,29 @@ extern "C" void app_main(void)
 
     //测试
 
-    // appController.Init();
-    // mpu.Init();
-    // appController.AppInstall(&WeatherApp);
+    appController.Init();
+    mpu.Init();
+    appController.AppInstall(&WeatherApp);
+    appController.AppInstall(&WifiApp);
 
 
-    // sntp_setoperatingmode(SNTP_OPMODE_POLL);
-    // sntp_setservername(0, "ntp5.aliyun.com");
-    // sntp_setservername(1, "ntp1.aliyun.com");
+    sntp_setoperatingmode(SNTP_OPMODE_POLL);
+    sntp_setservername(0, "ntp5.aliyun.com");
+    sntp_setservername(1, "ntp1.aliyun.com");
 
-    // a=mpu.GetAction();
+    a=mpu.GetAction();
 
-    // lvgl_mutex = xSemaphoreCreateMutex();
-    // while(1){
-    //     LVGL_OPERATE_LOCK(lv_task_handler();)
-    //     if(count == 3){
-    //         a=mpu.GetAction();
-    //         count =0;
-    //     }
-    //     appController.MainProcess(a);    
-    //     count++;
+    lvgl_mutex = xSemaphoreCreateMutex();
+    while(1){
+        LVGL_OPERATE_LOCK(lv_task_handler();)
+        if(count == 3){
+            a=mpu.GetAction();
+            count =0;
+        }
+        appController.MainProcess(a);    
+        count++;
         
-    // }
+    }
     
 
 }

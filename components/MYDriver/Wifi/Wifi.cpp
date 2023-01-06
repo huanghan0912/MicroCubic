@@ -22,11 +22,15 @@ static const char *TAG_AP = "wifi_AP";
 
 static EventGroupHandle_t s_wifi_event_group;
 
+char wifi_ssid[30];
+char wifi_password[30];
+
 static int s_retry_num = 0;
 #define EXAMPLE_ESP_MAXIMUM_RETRY  5
 SemaphoreHandle_t ap_sem;
 esp_netif_t* ap_netif;
 esp_netif_t* sta_netif;
+
 bool wifi_flag=false;
 
 void wifiAP_event_handler(void* arg, esp_event_base_t event_base,
@@ -148,7 +152,7 @@ void wifi_init_sta( char * ssid, char * password)
             WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
             pdFALSE,
             pdFALSE,
-            portMAX_DELAY);
+            0x3ff);
 
     /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
      * happened. */
@@ -187,14 +191,12 @@ void wifiAPDel(){
     esp_event_loop_delete_default();
     esp_wifi_deinit();
     esp_netif_deinit();
-    wifi_init_sta(wifi_name,wifi_password);
 }
 
 
 
 void startwifi(){
     httpd_handle_t server = NULL;
-    wifi_init_sta("34","22358122");
     if(wifi_flag == false){
         WifiSTADel();
         ap_sem = xSemaphoreCreateBinary();
@@ -205,6 +207,7 @@ void startwifi(){
         if(result == pdPASS){
             httpd_stop(server);
             wifiAPDel();
+            wifi_init_sta(wifi_ssid,wifi_password);
         }
     }
 }

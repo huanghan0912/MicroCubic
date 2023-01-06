@@ -5,13 +5,13 @@
 #include <esp_system.h>
 #include <nvs_flash.h>
 #include <sys/param.h>
+#include "Wifi.h"
 
 
 /* A simple example that demonstrates how to create GET and POST
  * handlers for the web server.
  */
-char wifi_name[30]={0};
-char wifi_password[30]={0};
+
 
 static const char *TAG = "HttpServer";
 
@@ -69,9 +69,9 @@ static esp_err_t echo_post_handler(httpd_req_t *req)
         httpd_resp_send_chunk(req, buf, ret);
         remaining -= ret;
 
-        esp_err_t e = httpd_query_key_value(buf,"ssid",wifi_name,sizeof(wifi_name));
+        esp_err_t e = httpd_query_key_value(buf,"ssid",wifi_ssid,sizeof(wifi_ssid));
         if(e == ESP_OK) {
-            printf("ssid = %s\r\n",wifi_name);
+            printf("ssid = %s\r\n",wifi_ssid);
         }
         else {
             printf("error = %d\r\n",e);
@@ -92,7 +92,7 @@ static esp_err_t echo_post_handler(httpd_req_t *req)
 
     // End response
     httpd_resp_send_chunk(req, NULL, 0);
-    if(strcmp(wifi_name ,"\0")!=0 && strcmp(wifi_password,"\0")!=0)
+    if(strcmp(wifi_ssid,"\0")!=0 && strcmp(wifi_password,"\0")!=0)
     {
         xSemaphoreGive(ap_sem);
         ESP_LOGI(TAG, "set wifi name and password successfully! goto station mode");
