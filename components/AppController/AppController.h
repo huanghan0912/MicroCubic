@@ -18,6 +18,7 @@
 #include "lvgl.h"
 #include "AppControllerType.h"
 #include "MPU.h"
+#include "Spiffs.h"
 
 #define APP_MAX_NUM 20
 #define APP_CONTROLLER_NAME_LEN 16
@@ -29,7 +30,7 @@ class AppController
 private:    
     Screen screen;
     Sd sdCard;
-
+    
     APPOBJ *appList[APP_MAX_NUM];      // 预留APP_MAX_NUM个APP注册位
     APPTYPE appTypeList[APP_MAX_NUM];  // 对应APP的运行类型
     

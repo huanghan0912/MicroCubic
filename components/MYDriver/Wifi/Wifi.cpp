@@ -31,7 +31,7 @@ SemaphoreHandle_t ap_sem;
 esp_netif_t* ap_netif;
 esp_netif_t* sta_netif;
 
-bool wifi_flag=false;
+bool wifi_flag = true;
 
 void wifiAP_event_handler(void* arg, esp_event_base_t event_base,
                                     int32_t event_id, void* event_data)
@@ -141,7 +141,7 @@ void wifi_init_sta( char * ssid, char * password)
     strcpy((char *)wifi_config.sta.password, password);
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
-    ESP_ERROR_CHECK(esp_wifi_set_config((wifi_interface_t)ESP_IF_WIFI_STA, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start() );
 
     ESP_LOGI(TAG_STA, "wifi_init_sta finished.");
@@ -161,9 +161,11 @@ void wifi_init_sta( char * ssid, char * password)
         ESP_LOGI(TAG_STA, "connected to ap SSID:%s, password:%s",
                  ssid, password);
     } else if (bits & WIFI_FAIL_BIT) {
+        wifi_flag = false;
         ESP_LOGI(TAG_STA, "Failed to connect to SSID:%s, password:%s",
                  ssid, password);
     } else {
+        wifi_flag = false;
         ESP_LOGE(TAG_STA, "UNEXPECTED Eprotocol_examples_common.h:ENT");
     }
 

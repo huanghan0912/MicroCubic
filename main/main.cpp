@@ -14,7 +14,7 @@
 #include "WeatherApp.h"
 #include "WifiApp.h"
 #include "MPU.h"
-
+#include "Spiffs.h"
 
 
 
@@ -51,12 +51,11 @@ extern "C" void app_main(void)
     ESP_ERROR_CHECK(err);
 
     //测试
-
-    appController.Init();
+    //测试
     mpu.Init();
+    appController.Init();
     appController.AppInstall(&WeatherApp);
     appController.AppInstall(&WifiApp);
-
 
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "ntp5.aliyun.com");

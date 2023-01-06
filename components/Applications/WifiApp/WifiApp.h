@@ -3,8 +3,13 @@
 
 #include "AppControllerType.h"
 
+
+
 extern APPOBJ WifiApp;
 
 void WifiAppInit();
+
+void Writewificfg();
+void Readwificfg();    
 
 #endif

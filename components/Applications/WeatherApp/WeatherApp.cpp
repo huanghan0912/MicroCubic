@@ -8,7 +8,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "freertos/timers.h"
-
+#include "String.h"
 #include "AppController.h"
 
 
@@ -159,7 +159,7 @@ static void WeatherProcess(AppController *sys, const ImuAction *act_info)
     }
     FlushTimeScrTask();
     FlushManGifTask();
-    vTaskDelay((10)/ portTICK_PERIOD_MS);
+    vTaskDelay((50)/ portTICK_PERIOD_MS);
 
 } 
 

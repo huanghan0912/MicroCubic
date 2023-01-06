@@ -64,6 +64,7 @@ void SetTextSrc(char *text)
 {
     WifiUIScrinit();
     lv_label_set_text_fmt(statusLabel, "%s ",text);
+    lv_label_set_text_fmt(wifiLabel, "your_ssid: %s\nyour_pass: %s",wifi_ssid,wifi_password);
 }
 
 

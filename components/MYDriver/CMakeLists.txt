@@ -11,6 +11,7 @@ set( SRCS_CORE
     Wifi/Wifi.cpp
     HttpClient/HttpClient.cpp
     HttpServer/HttpServer.cpp
+    Spiffs/Spiffs.cpp
  )
 
 
@@ -21,6 +22,7 @@ set(INCLUDE_CORE
     Wifi
     HttpClient
     HttpServer
+    Spiffs
 )
 
 
@@ -32,6 +34,7 @@ set(INCLUDE_CORE
     esp_event 
     esp_wifi
     driver
+    spiffs
     )
 
 

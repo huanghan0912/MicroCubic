@@ -4,6 +4,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include "freertos/timers.h"
+#include "Wifi.h"
+#include "WifiApp.h"
 
 
 void AppController::Init(){
@@ -16,8 +18,13 @@ void AppController::Init(){
 
     //
     sdCard.Init();
-    screen.Init();
+    screen.Init(); 
+    SpiffsInit();
     AppControllerUIInit();
+    AppcontrollerUIScrInit();
+
+    Readwificfg();  
+    wifi_init_sta(wifi_ssid, wifi_password);
 }
 
 void AppController::Display(){
