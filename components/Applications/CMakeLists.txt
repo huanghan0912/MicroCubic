@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.5)
 
 
 
-set( SRCS
+set(SRCS
     WeatherApp/WeatherApp.cpp
     WeatherApp/WeatherUI/WeatherUI.c
     WeatherApp/WeatherUI/ch_font_20.c
@@ -17,6 +17,12 @@ set( SRCS
     WifiApp/WifiApp.cpp
     WifiApp/WifiAppUI/WifiAppUI.c
     WifiApp/WifiAppUI/WifiIco.c
+
+    Game2048App/Game2048App.cpp
+    Game2048App/Game2048AppUI/Game2048AppUI.c
+    Game2048App/Game2048AppUI/Game2048Ico.c
+
+
     Screen.cpp
  )
 
@@ -27,6 +33,8 @@ set(INCLUDE
     WeatherApp/.
     WifiApp/.
     WifiApp/WifiAppUI/.
+    Game2048App/.
+    Game2048App/Game2048AppUI/.
     .
 )
 

@@ -14,6 +14,18 @@
 #define LCD_H 240
 
 
+// lvgl 操作的锁
+extern SemaphoreHandle_t lvgl_mutex;
+
+// LVGL操作的安全宏（避免脏数据）
+#define LVGL_OPERATE_LOCK(CODE)                          \
+    if (pdTRUE == xSemaphoreTake(lvgl_mutex, portMAX_DELAY)) \
+    {                                                        \
+        CODE                                                 \
+        xSemaphoreGive(lvgl_mutex);                          \
+    }
+
+
 
 
 class Screen

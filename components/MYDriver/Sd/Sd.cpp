@@ -12,7 +12,7 @@ void Sd::Init(){
     // VFS配置
     //挂载文件系统的选项。
     //如果 format_if_mount_failed 设置为 true，SD 卡将被分区并格式化以防挂载失败。
-	mount_config.format_if_mount_failed = false;
+	mount_config.format_if_mount_failed = true;
     mount_config.max_files = 5; //同时最大打开文件数
     mount_config.allocation_unit_size = 16 * 1024;
     

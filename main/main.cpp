@@ -12,6 +12,7 @@
 #include "esp_timer.h"
 #include "AppController.h"
 #include "WeatherApp.h"
+#include "Game2048App.h"
 #include "WifiApp.h"
 #include "MPU.h"
 #include "Spiffs.h"
@@ -25,20 +26,7 @@ ImuAction *a;
 
 int count=0;
 
- AppController appController;
-
-// lvgl 操作的锁
-SemaphoreHandle_t lvgl_mutex;
-
-// LVGL操作的安全宏（避免脏数据）
-#define LVGL_OPERATE_LOCK(CODE)                          \
-    if (pdTRUE == xSemaphoreTake(lvgl_mutex, portMAX_DELAY)) \
-    {                                                        \
-        CODE                                                 \
-        xSemaphoreGive(lvgl_mutex);                          \
-    }
-
-
+AppController appController;
 
 extern "C" void app_main(void)
 {
@@ -56,6 +44,7 @@ extern "C" void app_main(void)
     appController.Init();
     appController.AppInstall(&WeatherApp);
     appController.AppInstall(&WifiApp);
+    appController.AppInstall(&Game2048App);
 
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "ntp5.aliyun.com");
@@ -63,7 +52,6 @@ extern "C" void app_main(void)
 
     a=mpu.GetAction();
 
-    lvgl_mutex = xSemaphoreCreateMutex();
     while(1){
         LVGL_OPERATE_LOCK(lv_task_handler();)
         if(count == 3){

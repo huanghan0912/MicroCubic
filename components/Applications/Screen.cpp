@@ -15,7 +15,7 @@ static esp_timer_create_args_t lvgl_timer = {
     .dispatch_method = ESP_TIMER_TASK, 
     .name ="lvgl_timer"
 };
-
+SemaphoreHandle_t lvgl_mutex ;
 
 /**
  * @brief Initialize the display
@@ -25,7 +25,8 @@ void Screen::Init(){
     lvgl_driver_init();
     lv_port_disp_init();
     _lv_timer_create();
-    // xTaskCreatePinnedToCore(lvglTask,"lvgl_task",4096*2,NULL,9,NULL,APP_CPU_NUM);
+    lvgl_mutex = xSemaphoreCreateMutex();
+    // xTaskCreate(lvglTask,"lvgl_task",4096*2,NULL,1,NULL);
 
 }
 
@@ -92,7 +93,7 @@ void lv_port_disp_init()
 void lvglTask(void* Parameter){
     while(1)
     {
-        vTaskDelay(50 / portTICK_PERIOD_MS);
-        lv_task_handler();
+        vTaskDelay(10/ portTICK_PERIOD_MS);
+        LVGL_OPERATE_LOCK( lv_task_handler();)
     }
 } 
