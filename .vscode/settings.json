@@ -14,6 +14,8 @@
     "files.associations": {
         "*.cpp": "cpp",
         "*.ipp": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "screen.h": "c",
+        "lvgl.h": "c"
     }
 }

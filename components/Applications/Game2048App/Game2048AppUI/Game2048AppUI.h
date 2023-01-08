@@ -10,7 +10,7 @@ extern "C"
 
 
 void Game2048UIInit(void);
-
+void Game2048UIdel(void); 
 
 
 const lv_img_dsc_t* getN(int i);

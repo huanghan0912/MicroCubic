@@ -1,5 +1,5 @@
 #include "Game2048Controller.h"
-
+#include "esp_random.h"
 
 /*
  * 随机刷新一个2或4

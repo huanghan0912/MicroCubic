@@ -3,6 +3,7 @@
 
 
 
+
 #define SCALE_SIZE 4
 
 lv_obj_t *game2048_src = NULL;
@@ -34,7 +35,7 @@ void Game2048UIInit(void)
 }
 
 
-void game2048_src_del(void)
+void Game2048UIdel(void)
 {
     if (NULL != game2048_src)
     {
@@ -70,6 +71,7 @@ void born(int i)
     lv_anim_set_var(&a, img[i]);
     lv_anim_set_time(&a, 300);
 
+
     /* 在动画中设置路径 */
     lv_anim_set_path_cb(&a, lv_anim_path_linear);
 
@@ -91,6 +93,8 @@ void born(int i)
     lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_img_set_offset_y);
     lv_anim_set_values(&a, -25, 0);
     lv_anim_start(&a);
+
+
 }
 
 /*
@@ -251,5 +255,5 @@ void showNewBorn(int newborn, int *map)
     showBoard(map);
 
     //出现
-    born(newborn);
+    // born(newborn);
 }

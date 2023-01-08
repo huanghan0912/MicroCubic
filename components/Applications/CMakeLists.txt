@@ -19,8 +19,10 @@ set(SRCS
     WifiApp/WifiAppUI/WifiIco.c
 
     Game2048App/Game2048App.cpp
+    Game2048App/Game2048Controller.cpp
     Game2048App/Game2048AppUI/Game2048AppUI.c
     Game2048App/Game2048AppUI/Game2048Ico.c
+
 
 
     Screen.cpp
