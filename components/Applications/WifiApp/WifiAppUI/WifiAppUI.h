@@ -13,7 +13,7 @@ void WifiUIInit();
 
 void WifiUIScrinit();
 
-void SetTextSrc(char *text);
+void SetWifiTextSrc(char *text);
 
 void WifiUIDel();
 

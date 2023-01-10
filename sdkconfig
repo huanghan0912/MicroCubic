@@ -253,6 +253,71 @@ CONFIG_EFUSE_MAX_BLK_LEN=256
 # end of eFuse Bit Manager
 
 #
+# iotkit embedded
+#
+
+#
+# Aliyun linkkit device version
+#
+CONFIG_LINKKIT_FIRMWARE_VERSION="0.0.1"
+# end of Aliyun linkkit device version
+
+#
+# Aliyun linkkit awss config
+#
+CONFIG_AWSS_ENCRYPT_TYPE=3
+CONFIG_AWSS_CONN_ENCRYPT_TYPE=4
+CONFIG_AWSS_TIMEOUT_INTERVAL_MS=180000
+CONFIG_AWSS_CHANNELSCAN_INTERVAL_MS=200
+# end of Aliyun linkkit awss config
+
+#
+# Aliyun linkkit network config
+#
+# CONFIG_SUPPORT_TCP is not set
+CONFIG_TCP_ESTABLISH_TIMEOUT_MS=10000
+CONFIG_TLS_ESTABLISH_TIMEOUT_MS=10000
+# end of Aliyun linkkit network config
+
+#
+# Aliyun linkkit device model config
+#
+# CONFIG_DEVICE_MODEL_GATEWAY is not set
+# end of Aliyun linkkit device model config
+
+#
+# Aliyun linkkit local control
+#
+# CONFIG_DEVICE_ALCS_ENABLE is not set
+# end of Aliyun linkkit local control
+
+#
+# Aliyun linkkit security OTA
+#
+# CONFIG_SUPPORT_SECURITY_OTA is not set
+# end of Aliyun linkkit security OTA
+
+#
+# Aliyun linkkit dynamic register
+#
+CONFIG_DYNAMIC_REGISTER=y
+# end of Aliyun linkkit dynamic register
+
+#
+# Aliyun linkkit mqtt config
+#
+CONFIG_MQTT_DIRECT=y
+# end of Aliyun linkkit mqtt config
+
+CONFIG_HAL_SEM_MAX_COUNT=255
+CONFIG_HAL_SEM_INIT_COUNT=0
+CONFIG_HAL_TLS_HANDSHAKE_TIMEOUT=180
+# CONFIG_HAL_USE_CUSTOMER_AP_SSID is not set
+CONFIG_AP_SSID_KEY="apssid"
+# CONFIG_USE_SOFTAP_CONFIG is not set
+# end of iotkit embedded
+
+#
 # ESP-TLS
 #
 CONFIG_ESP_TLS_USING_MBEDTLS=y
@@ -386,7 +451,7 @@ CONFIG_HTTPD_PURGE_BUF_LEN=32
 #
 # ESP HTTPS OTA
 #
-# CONFIG_OTA_ALLOW_HTTP is not set
+CONFIG_OTA_ALLOW_HTTP=y
 # end of ESP HTTPS OTA
 
 #
@@ -1580,9 +1645,9 @@ CONFIG_LV_TFT_DISPLAY_CONTROLLER_ST7789=y
 CONFIG_LV_TFT_DISPLAY_PROTOCOL_SPI=y
 # CONFIG_LV_DISPLAY_ORIENTATION_PORTRAIT is not set
 # CONFIG_LV_DISPLAY_ORIENTATION_PORTRAIT_INVERTED is not set
-CONFIG_LV_DISPLAY_ORIENTATION_LANDSCAPE=y
-# CONFIG_LV_DISPLAY_ORIENTATION_LANDSCAPE_INVERTED is not set
-CONFIG_LV_DISPLAY_ORIENTATION=2
+# CONFIG_LV_DISPLAY_ORIENTATION_LANDSCAPE is not set
+CONFIG_LV_DISPLAY_ORIENTATION_LANDSCAPE_INVERTED=y
+CONFIG_LV_DISPLAY_ORIENTATION=3
 CONFIG_LV_PREDEFINED_PINS_NONE=y
 # CONFIG_LV_PREDEFINED_PINS_38V4 is not set
 # CONFIG_LV_PREDEFINED_PINS_30 is not set

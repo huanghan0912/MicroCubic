@@ -23,6 +23,10 @@ set(SRCS
     Game2048App/Game2048AppUI/Game2048AppUI.c
     Game2048App/Game2048AppUI/Game2048Ico.c
 
+    UpgradeApp/UpgradeApp.cpp
+    UpgradeApp/UpgradeAppUI/UpgradeAppUI.c
+    UpgradeApp/UpgradeAppUI/UpgradeIco.c
+
 
 
     Screen.cpp
@@ -37,6 +41,8 @@ set(INCLUDE
     WifiApp/WifiAppUI/.
     Game2048App/.
     Game2048App/Game2048AppUI/.
+    UpgradeApp/.
+    UpgradeApp/UpgradeAppUI/.
     .
 )
 
@@ -46,6 +52,7 @@ set(INCLUDE
  set(COMPONENT_REQUIRES
     lvgl
     lvgl_esp32_drivers
+    esp_https_ota
     MYDriver
     json
     mpu6050

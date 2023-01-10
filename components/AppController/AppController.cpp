@@ -95,7 +95,7 @@ int AppController::MainProcess(ImuAction *act_info)
         {
             AppControlDisplayScr(appList[cur_app_index]->app_image,
                                     appList[cur_app_index]->app_name);
-            vTaskDelay(200 / portTICK_PERIOD_MS);
+            vTaskDelay(300 / portTICK_PERIOD_MS);
         }
     }
     else

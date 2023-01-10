@@ -128,7 +128,7 @@ static void Game2048Process(AppController *sys,
     }
 
     // 程序需要时可以适当加延时
-    vTaskDelay(300 / portTICK_PERIOD_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
 static void Game2048Background(AppController *sys,

@@ -25,7 +25,7 @@ static int WifiInit(AppController *sys)
 {
     WifiUIInit();
     WifiUIScrinit();
-    SetTextSrc(statetext[1]);
+    SetWifiTextSrc(statetext[1]);
     Readwificfg();
     return 0;
 }
@@ -66,12 +66,12 @@ static void WifiProcess(AppController *sys, const ImuAction *act_info)
         return;
     }
     if(wifi_flag == false){
-        SetTextSrc(statetext[3]);
-        lv_task_handler();//这里会阻塞，更新屏幕数据
+        SetWifiTextSrc(statetext[3]);
+        lv_task_handler();//更新屏幕数据
         startwifi();
         Writewificfg(); 
     }else {
-        SetTextSrc(statetext[0]);
+        SetWifiTextSrc(statetext[0]);
     }
     vTaskDelay((100)/ portTICK_PERIOD_MS);
 

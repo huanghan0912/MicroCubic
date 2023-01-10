@@ -16,7 +16,7 @@
 #include "WifiApp.h"
 #include "MPU.h"
 #include "Spiffs.h"
-
+#include "UpgradeApp.h"
 
 
 Mpu mpu;
@@ -42,9 +42,10 @@ extern "C" void app_main(void)
     //测试
     mpu.Init();
     appController.Init();
-    appController.AppInstall(&WeatherApp);
+    // appController.AppInstall(&WeatherApp);
     appController.AppInstall(&WifiApp);
-    appController.AppInstall(&Game2048App);
+    // appController.AppInstall(&Game2048App);
+    appController.AppInstall(&UpgradeApp);
 
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "ntp5.aliyun.com");
@@ -54,7 +55,7 @@ extern "C" void app_main(void)
 
     while(1){
         LVGL_OPERATE_LOCK(lv_task_handler();)
-        if(count == 3){
+        if(count == 2){
             a=mpu.GetAction();
             count =0;
         }

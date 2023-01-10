@@ -62,6 +62,8 @@ ImuAction *Mpu::GetAction()
         bool is_holdon = false; //是否长按
         int second =(index + ACTION_HISTORY_BUF_LEN - 1) % ACTION_HISTORY_BUF_LEN;
         int third = (index + ACTION_HISTORY_BUF_LEN - 2) % ACTION_HISTORY_BUF_LEN;
+        int forth = (index + ACTION_HISTORY_BUF_LEN - 3) % ACTION_HISTORY_BUF_LEN;
+
 
         if (tmp_info.action!=UNKNOWN )
         {
@@ -69,7 +71,8 @@ ImuAction *Mpu::GetAction()
             action_info.action = tmp_info.action;
         }
         // printf("%d %d %d\n",action_history[index],action_history[second],action_history[third]);
-        if (action_history[index] == action_history[second] && action_history[second] == action_history[third])
+        if (action_history[index] == action_history[second] && action_history[second] == action_history[third] &&
+                    action_history[third] == action_history[forth])
         {
             // 目前只识别前后的长按
             if (tmp_info.action == UP)
